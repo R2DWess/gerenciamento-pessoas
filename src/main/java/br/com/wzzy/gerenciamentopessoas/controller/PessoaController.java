@@ -45,7 +45,7 @@ public class PessoaController {
         return pessoaService.listarPessoa();
     }
 
-    @GetMapping("/buscar-pessoa/{idPessoa}")
+    @GetMapping("/buscar-id/{idPessoa}")
     public ResponseEntity<PessoaModel> buscarPessoaPorIdPessoa(@PathVariable Long idPessoa) {
         try {
             PessoaModel pessoaEncontradaPorId = pessoaService.buscarPessoaPorIdPessoa(idPessoa);
@@ -56,16 +56,16 @@ public class PessoaController {
     }
 
     @DeleteMapping("/deletar-pessoa/{idPessoa}")
-    public ResponseEntity<PessoaModel> deletarPessoa(@PathVariable Long idPessoa) {
+    public String deletarPessoa(@PathVariable Long idPessoa) {
         try {
-            PessoaModel pessoaDeletada = pessoaService.deletarPessoa(idPessoa);
-            return new ResponseEntity<>(pessoaDeletada, HttpStatus.OK);
-        } catch (Exception exception) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            pessoaService.deletarPessoa(idPessoa);
+            return "Pessoa com ID " + idPessoa + " deletado com sucesso.";
+        } catch (RuntimeException exception) {
+            return exception.getMessage();
         }
     }
 
-    @GetMapping("/buscar-pessoa/{nome}")
+    @GetMapping("/buscar-nome/{nome}")
     public ResponseEntity<PessoaModel> buscarPessoaPorIdPessoa(@PathVariable String nome) {
         try {
             PessoaModel pessoaEncontradaPorNome = pessoaService.buscarPessoaPorNome(nome);
@@ -75,11 +75,11 @@ public class PessoaController {
         }
     }
 
-    @GetMapping("/buscar-pessoa/{cpf}")
+    @GetMapping("/buscar-cpf/{cpf}")
     public ResponseEntity<PessoaModel> buscarPessoaPorCpf(@PathVariable String cpf) {
         try {
-            PessoaModel pessoaEncontradaPorNome = pessoaService.buscarPessoaPorCpf(cpf);
-            return new ResponseEntity<>(pessoaEncontradaPorNome, HttpStatus.OK);
+            PessoaModel pessoaEncontradaPorCpf = pessoaService.buscarPessoaPorCpf(cpf);
+            return new ResponseEntity<>(pessoaEncontradaPorCpf, HttpStatus.OK);
         } catch (Exception exception) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }

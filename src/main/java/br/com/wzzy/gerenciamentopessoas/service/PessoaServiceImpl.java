@@ -8,8 +8,10 @@ import br.com.wzzy.gerenciamentopessoas.repository.EnderecoRepository;
 import br.com.wzzy.gerenciamentopessoas.repository.PessoaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PessoaServiceImpl implements PessoaService {
@@ -68,8 +70,13 @@ public class PessoaServiceImpl implements PessoaService {
     }
 
     @Override
-    public PessoaModel deletarPessoa(Long idPessoa) {
-        return pessoaRepository.deleteByIdPessoa(idPessoa);
+    @Transactional
+    public void deletarPessoa(Long idPessoa) {
+        if (pessoaRepository.existsByIdPessoa(idPessoa)) {
+            pessoaRepository.deleteByIdPessoa(idPessoa);
+        } else {
+            throw new RuntimeException("Pessoa com id " + idPessoa + " não encontrado.");
+        }
     }
 
     @Override

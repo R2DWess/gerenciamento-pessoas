@@ -13,7 +13,7 @@ public interface PessoaService {
 
     PessoaModel buscarPessoaPorIdPessoa(Long idPessoa);
 
-    PessoaModel deletarPessoa(Long idPessoa);
+    void deletarPessoa(Long idPessoa);
 
     PessoaModel buscarPessoaPorNome(String nome);
 
