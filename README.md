@@ -15,8 +15,7 @@ Projeto voltado para a criação de uma funcionalidade que cadastre pessoas no b
 5. 🆔 Busca de pessoas por ID;
 6. 🔍 Busca de pessoas por nome;
 7. 🆔 Busca de pessoas por CPF;
-8. 🆔 Busca de pessoas por RG;
-9. 🏠 Busca de pessoas por endereço;
+
 
 #### Tecnologias utilizadas:
 - ☕ Java 23;
