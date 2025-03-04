@@ -9,6 +9,8 @@ import br.com.wzzy.gerenciamentopessoas.repository.PessoaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PessoaServiceImpl implements PessoaService {
 
@@ -43,4 +45,27 @@ public class PessoaServiceImpl implements PessoaService {
         // Salva o objeto PessoaModel no banco de dados e retorna o objeto salvo
         return pessoaRepository.save(pessoaModel);
     }
+
+    @Override
+    public PessoaModel atualizarPessoa(PessoaModel pessoaModel) {
+        ContatoModel contatoModel = contatoRepository.save(pessoaModel.getContatoModel());
+        EnderecoModel enderecoModel = enderecoRepository.save(pessoaModel.getEnderecoModel());
+
+        pessoaModel.setContatoModel(contatoModel);
+        pessoaModel.setEnderecoModel(enderecoModel);
+
+        return pessoaRepository.save(pessoaModel);
+    }
+
+    @Override
+    public List<PessoaModel> listarPessoa() {
+        return pessoaRepository.findAll();
+    }
+
+    @Override
+    public PessoaModel buscarPessoaPorIdPessoa(Long idPessoa) {
+        return pessoaRepository.findByIdPessoa(idPessoa);
+    }
+
+
 }
