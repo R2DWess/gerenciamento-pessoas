@@ -21,11 +21,11 @@ Projeto voltado para a criação de uma funcionalidade que cadastre pessoas no b
 11. 🏠 Busca de pessoas por endereço;
 
 #### Tecnologias utilizadas:
-- Java 23;
-- Spring Boot;
-- Gradle;
-- JPA;
-- MySQL;
+- ☕ Java 23;
+- 🍃 Spring Boot;
+- 🐘 Gradle;
+- 🗃️ JPA;
+- 🐬 MySQL;
 
 #### Curl de exemplo:
 
