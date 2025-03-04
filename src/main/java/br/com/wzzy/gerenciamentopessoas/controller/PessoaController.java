@@ -48,8 +48,8 @@ public class PessoaController {
     @GetMapping("/buscar-pessoa/{idPessoa}")
     public ResponseEntity<PessoaModel> buscarPessoaPorIdPessoa(@PathVariable Long idPessoa) {
         try {
-            PessoaModel pessoaEncontrada = pessoaService.buscarPessoaPorIdPessoa(idPessoa);
-            return new ResponseEntity<>(pessoaEncontrada, HttpStatus.OK);
+            PessoaModel pessoaEncontradaPorId = pessoaService.buscarPessoaPorIdPessoa(idPessoa);
+            return new ResponseEntity<>(pessoaEncontradaPorId, HttpStatus.OK);
         } catch (Exception exception) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -58,8 +58,18 @@ public class PessoaController {
     @DeleteMapping("/deletar-pessoa/{idPessoa}")
     public ResponseEntity<PessoaModel> deletarPessoa(@PathVariable Long idPessoa) {
         try {
-            PessoaModel pessoaEncontrada = pessoaService.deletarPessoa(idPessoa);
-            return new ResponseEntity<>(pessoaEncontrada, HttpStatus.OK);
+            PessoaModel pessoaDeletada = pessoaService.deletarPessoa(idPessoa);
+            return new ResponseEntity<>(pessoaDeletada, HttpStatus.OK);
+        } catch (Exception exception) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/buscar-pessoa/{nome}")
+    public ResponseEntity<PessoaModel> buscarPessoaPorIdPessoa(@PathVariable String nome) {
+        try {
+            PessoaModel pessoaEncontradaPorNome = pessoaService.buscarPessoaPorNome(nome);
+            return new ResponseEntity<>(pessoaEncontradaPorNome, HttpStatus.OK);
         } catch (Exception exception) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }

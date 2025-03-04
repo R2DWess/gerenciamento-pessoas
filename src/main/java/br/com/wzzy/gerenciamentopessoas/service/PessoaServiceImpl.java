@@ -72,5 +72,10 @@ public class PessoaServiceImpl implements PessoaService {
         return pessoaRepository.deleteByIdPessoa(idPessoa);
     }
 
+    @Override
+    public PessoaModel buscarPessoaPorNome(String nome) {
+        return pessoaRepository.findByNome(nome);
+    }
+
 
 }
