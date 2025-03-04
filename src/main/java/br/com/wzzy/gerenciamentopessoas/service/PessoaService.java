@@ -16,4 +16,6 @@ public interface PessoaService {
     PessoaModel deletarPessoa(Long idPessoa);
 
     PessoaModel buscarPessoaPorNome(String nome);
+
+    PessoaModel buscarPessoaPorCpf(String cpf);
 }

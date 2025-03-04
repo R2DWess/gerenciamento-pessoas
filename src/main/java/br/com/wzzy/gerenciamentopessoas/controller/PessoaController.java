@@ -75,4 +75,14 @@ public class PessoaController {
         }
     }
 
+    @GetMapping("/buscar-pessoa/{cpf}")
+    public ResponseEntity<PessoaModel> buscarPessoaPorCpf(@PathVariable String cpf) {
+        try {
+            PessoaModel pessoaEncontradaPorNome = pessoaService.buscarPessoaPorCpf(cpf);
+            return new ResponseEntity<>(pessoaEncontradaPorNome, HttpStatus.OK);
+        } catch (Exception exception) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }

@@ -77,5 +77,10 @@ public class PessoaServiceImpl implements PessoaService {
         return pessoaRepository.findByNome(nome);
     }
 
+    @Override
+    public PessoaModel buscarPessoaPorCpf(String cpf) {
+        return pessoaRepository.findByCpf(cpf);
+    }
+
 
 }

@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.br.CPF;
 
 @Getter
 @Setter
@@ -25,6 +26,9 @@ public class PessoaModel {
 
     @NotBlank(message = "O campo idade está incorreto")
     private String idade;
+
+    @CPF(message = "cpf inválido")
+    private String cpf;
 
     @ManyToOne
     @JoinColumn(name = "contato_model_id_contato")
