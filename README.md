@@ -97,42 +97,13 @@ curl --request GET \
   --header 'User-Agent: insomnia/10.3.1'
 ```
 
-7 - Busca de pessoa por sobrenome:
-```cmd
-curl --request GET \
-  --url http://localhost:8080/v1/pessoas/buscar/sobrenome/Silva \
-  --header 'User-Agent: insomnia/10.3.1'
-```
-
-8 - Busca de pessoa por data de nascimento:
-```cmd
-curl --request GET \
-  --url http://localhost:8080/v1/pessoas/buscar/dataNascimento/1992-01-01 \
-  --header 'User-Agent: insomnia/10.3.1'
-```
-
-9 - Busca de pessoa por CPF:
+7 - Busca de pessoa por CPF:
 ```cmd
 curl --request GET \
   --url http://localhost:8080/v1/pessoas/buscar/cpf/12345678900 \
   --header 'User-Agent: insomnia/10.3.1'
 ```
 
-10 - Busca de pessoa por RG:
-```cmd
-
-curl --request GET \
-  --url http://localhost:8080/v1/pessoas/buscar/rg/123456789 \
-  --header 'User-Agent: insomnia/10.3.1'
-```
-
-11 - Busca de pessoa por endereço:
-```cmd
-
-curl --request GET \
-  --url http://localhost:8080/v1/pessoas/buscar/endereco/Carapicuíba \
-  --header 'User-Agent: insomnia/10.3.1'
-```
 ## 🛺 Autor
 
 <table>
