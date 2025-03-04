@@ -12,4 +12,6 @@ public interface PessoaService {
     List<PessoaModel> listarPessoa();
 
     PessoaModel buscarPessoaPorIdPessoa(Long idPessoa);
+
+    PessoaModel deletarPessoa(Long idPessoa);
 }

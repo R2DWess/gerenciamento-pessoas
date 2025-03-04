@@ -67,5 +67,10 @@ public class PessoaServiceImpl implements PessoaService {
         return pessoaRepository.findByIdPessoa(idPessoa);
     }
 
+    @Override
+    public PessoaModel deletarPessoa(Long idPessoa) {
+        return pessoaRepository.deleteByIdPessoa(idPessoa);
+    }
+
 
 }

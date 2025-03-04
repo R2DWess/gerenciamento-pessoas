@@ -7,4 +7,5 @@ public interface PessoaRepository extends JpaRepository<PessoaModel, Long> {
 
     PessoaModel findByIdPessoa(Long idPessoa);
 
+    PessoaModel deleteByIdPessoa(Long idPessoa);
 }

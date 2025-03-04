@@ -55,4 +55,14 @@ public class PessoaController {
         }
     }
 
+    @DeleteMapping("/deletar-pessoa/{idPessoa}")
+    public ResponseEntity<PessoaModel> deletarPessoa(@PathVariable Long idPessoa) {
+        try {
+            PessoaModel pessoaEncontrada = pessoaService.deletarPessoa(idPessoa);
+            return new ResponseEntity<>(pessoaEncontrada, HttpStatus.OK);
+        } catch (Exception exception) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }
