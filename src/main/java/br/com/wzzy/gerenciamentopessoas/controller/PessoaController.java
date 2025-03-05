@@ -30,15 +30,17 @@ public class PessoaController {
         }
     }
 
-    @PatchMapping("/atualizar-pessoa")
-    public ResponseEntity<PessoaModel> atualizarPessoa(@RequestBody PessoaModel pessoaModel) {
+    @PatchMapping("/atualizar-pessoa/{idPessoa}")
+    public ResponseEntity<PessoaModel> atualizarPessoa(@PathVariable Long idPessoa,
+                                                       @RequestBody PessoaModel pessoaModel) {
         try {
-            PessoaModel pessoaAtualizada = pessoaService.atualizarPessoa(pessoaModel);
+            PessoaModel pessoaAtualizada = pessoaService.atualizarPessoa(idPessoa, pessoaModel);
             return new ResponseEntity<>(pessoaAtualizada, HttpStatus.OK);
         } catch (Exception exception) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
     @GetMapping("/listar-pessoa")
     public List<PessoaModel> listarPessoa() {
@@ -65,10 +67,17 @@ public class PessoaController {
         }
     }
 
+    @DeleteMapping("/deletar-pessoa")
+    public void deletarTodos() {
+            pessoaService.deletarTodos();
+
+    }
+
+
     @GetMapping("/buscar-nome/{nome}")
-    public ResponseEntity<PessoaModel> buscarPessoaPorIdPessoa(@PathVariable String nome) {
+    public ResponseEntity<List<PessoaModel>> buscarPessoaPorNome(@PathVariable String nome) {
         try {
-            PessoaModel pessoaEncontradaPorNome = pessoaService.buscarPessoaPorNome(nome);
+            List<PessoaModel> pessoaEncontradaPorNome = pessoaService.buscarPessoaPorNome(nome);
             return new ResponseEntity<>(pessoaEncontradaPorNome, HttpStatus.OK);
         } catch (Exception exception) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -76,9 +85,9 @@ public class PessoaController {
     }
 
     @GetMapping("/buscar-cpf/{cpf}")
-    public ResponseEntity<PessoaModel> buscarPessoaPorCpf(@PathVariable String cpf) {
+    public ResponseEntity<List<PessoaModel>> buscarPessoaPorCpf(@PathVariable String cpf) {
         try {
-            PessoaModel pessoaEncontradaPorCpf = pessoaService.buscarPessoaPorCpf(cpf);
+            List<PessoaModel> pessoaEncontradaPorCpf = pessoaService.buscarPessoaPorCpf(cpf);
             return new ResponseEntity<>(pessoaEncontradaPorCpf, HttpStatus.OK);
         } catch (Exception exception) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);

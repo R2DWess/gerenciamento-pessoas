@@ -1,9 +1,11 @@
 package br.com.wzzy.gerenciamentopessoas.service;
 
 import br.com.wzzy.gerenciamentopessoas.model.ContatoModel;
+import br.com.wzzy.gerenciamentopessoas.model.DadosPessoaisModel;
 import br.com.wzzy.gerenciamentopessoas.model.EnderecoModel;
 import br.com.wzzy.gerenciamentopessoas.model.PessoaModel;
 import br.com.wzzy.gerenciamentopessoas.repository.ContatoRepository;
+import br.com.wzzy.gerenciamentopessoas.repository.DadosPessoaisRepository;
 import br.com.wzzy.gerenciamentopessoas.repository.EnderecoRepository;
 import br.com.wzzy.gerenciamentopessoas.repository.PessoaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PessoaServiceImpl implements PessoaService {
@@ -19,44 +20,55 @@ public class PessoaServiceImpl implements PessoaService {
     private final PessoaRepository pessoaRepository;
     private final EnderecoRepository enderecoRepository;
     private final ContatoRepository contatoRepository;
+    private final DadosPessoaisRepository dadosPessoaisRepository;
 
 
     @Autowired
-    public PessoaServiceImpl(PessoaRepository pessoaRepository, EnderecoRepository enderecoRepository, ContatoRepository contatoRepository) {
+    public PessoaServiceImpl(PessoaRepository pessoaRepository, EnderecoRepository enderecoRepository, ContatoRepository contatoRepository, DadosPessoaisRepository dadosPessoaisRepository) {
         this.pessoaRepository = pessoaRepository;
         this.enderecoRepository = enderecoRepository;
         this.contatoRepository = contatoRepository;
+        this.dadosPessoaisRepository = dadosPessoaisRepository;
     }
 
-    /*
-     * O método cadastrarPessoa recebe um objeto PessoaModel contendo os dados da pessoa a ser cadastrada.
-     * Primeiro, salvamos o objeto ContatoModel associado à pessoa no banco de dados usando contatoRepository.save.
-     * Em seguida, salvamos o objeto EnderecoModel associado à pessoa no banco de dados usando enderecoRepository.save.
-     * Após salvar os objetos ContatoModel e EnderecoModel, associamos esses objetos salvos ao objeto PessoaModel.
-     * Finalmente, salvamos o objeto PessoaModel no banco de dados usando pessoaRepository.save e retornamos o objeto salvo.
-     */
+    private PessoaModel getPessoaModel(PessoaModel pessoaModel) {
+        ContatoModel contatoModel = contatoRepository.save(pessoaModel.getContatoModel());
+        EnderecoModel enderecoModel = enderecoRepository.save(pessoaModel.getEnderecoModel());
+        DadosPessoaisModel dadosPessoaisModel = dadosPessoaisRepository.save(pessoaModel.getDadosPessoaisModel());
+
+        pessoaModel.setContatoModel(contatoModel);
+        pessoaModel.setEnderecoModel(enderecoModel);
+        pessoaModel.setDadosPessoaisModel(dadosPessoaisModel);
+
+        return pessoaRepository.save(pessoaModel);
+    }
+
+    private List<PessoaModel> recuperarNomePessoa(String nome) {
+        return pessoaRepository.findByDadosPessoaisModel_Nome(nome);
+    }
+
+    private List<PessoaModel> recuperarCpfPessoa(String cpf) {
+        return pessoaRepository.findByDadosPessoaisModel_Cpf(cpf);
+    }
+
+    private PessoaModel recuperarIdPessoa(Long idPessoa) {
+        return pessoaRepository.findByIdPessoa(idPessoa);
+    }
+
     @Override
     public PessoaModel cadastrarPessoa(PessoaModel pessoaModel) {
-        // Salva o contato associado à pessoa
-        ContatoModel contatoModel = contatoRepository.save(pessoaModel.getContatoModel());
-        // Salva o endereço associado à pessoa
-        EnderecoModel enderecoModel = enderecoRepository.save(pessoaModel.getEnderecoModel());
-        // Associa os objetos salvos ao objeto PessoaModel
-        pessoaModel.setContatoModel(contatoModel);
-        pessoaModel.setEnderecoModel(enderecoModel);
-        // Salva o objeto PessoaModel no banco de dados e retorna o objeto salvo
-        return pessoaRepository.save(pessoaModel);
+        return getPessoaModel(pessoaModel);
     }
 
     @Override
-    public PessoaModel atualizarPessoa(PessoaModel pessoaModel) {
-        ContatoModel contatoModel = contatoRepository.save(pessoaModel.getContatoModel());
-        EnderecoModel enderecoModel = enderecoRepository.save(pessoaModel.getEnderecoModel());
+    public PessoaModel atualizarPessoa(Long idPessoa, PessoaModel pessoaModel) {
+        PessoaModel pessoaExistente = recuperarIdPessoa(idPessoa);
 
-        pessoaModel.setContatoModel(contatoModel);
-        pessoaModel.setEnderecoModel(enderecoModel);
+        if (pessoaExistente == null) {
+            throw new RuntimeException("Pessoa com ID " + idPessoa + " não encontrada para atualização");
+        }
 
-        return pessoaRepository.save(pessoaModel);
+        return getPessoaModel(pessoaModel);
     }
 
     @Override
@@ -64,10 +76,12 @@ public class PessoaServiceImpl implements PessoaService {
         return pessoaRepository.findAll();
     }
 
+    @Transactional
     @Override
-    public PessoaModel buscarPessoaPorIdPessoa(Long idPessoa) {
-        return pessoaRepository.findByIdPessoa(idPessoa);
+    public void deletarTodos() {
+        pessoaRepository.deleteAll();
     }
+
 
     @Override
     @Transactional
@@ -80,14 +94,18 @@ public class PessoaServiceImpl implements PessoaService {
     }
 
     @Override
-    public PessoaModel buscarPessoaPorNome(String nome) {
-        return pessoaRepository.findByNome(nome);
+    public PessoaModel buscarPessoaPorIdPessoa(Long idPessoa) {
+        return recuperarIdPessoa(idPessoa);
     }
 
     @Override
-    public PessoaModel buscarPessoaPorCpf(String cpf) {
-        return pessoaRepository.findByCpf(cpf);
+    public List<PessoaModel> buscarPessoaPorNome(String nome) {
+        return recuperarNomePessoa(nome);
     }
 
+    @Override
+    public List<PessoaModel> buscarPessoaPorCpf(String cpf) {
+        return recuperarCpfPessoa(cpf);
+    }
 
 }

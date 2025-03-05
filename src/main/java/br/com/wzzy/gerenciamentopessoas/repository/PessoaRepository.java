@@ -11,9 +11,12 @@ public interface PessoaRepository extends JpaRepository<PessoaModel, Long> {
 
     void deleteByIdPessoa(Long idPessoa);
 
-    PessoaModel findByNome(String nome);
-
-    PessoaModel findByCpf(String cpf);
-
     boolean existsByIdPessoa(Long idPessoa);
+
+    List<PessoaModel> findByDadosPessoaisModel_Nome(String nome);
+
+    List<PessoaModel> findByDadosPessoaisModel_Cpf(String cpf);
+
+//    List<PessoaModel> recuperarIdPessoa(Long idPessoa);
+
 }
