@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="img.png" alt="Universidade Católica de Brasília">
+  <img src="logo.png" alt="Universidade Católica de Brasília">
 </p>
 
 ## PROJETO PESSOAL - GERENCIAMENTO DE PESSOAS:
