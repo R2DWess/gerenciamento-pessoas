@@ -2,7 +2,7 @@
   <img src="https://iili.io/3FFO5cF.png" alt="Universidade Católica de Brasília">
 </p>
 
-## PROJETO PESSOAL - GERENCIAMENTO DE PESSOAS:
+## PROJETO PESSOAL - GERENCIAMENTO DE PESSOAS 👨🏾 🧔🏾‍♀️:
 
 #### Descrição:
 Projeto voltado para a criação de uma funcionalidade que cadastre pessoas no banco de dados local
