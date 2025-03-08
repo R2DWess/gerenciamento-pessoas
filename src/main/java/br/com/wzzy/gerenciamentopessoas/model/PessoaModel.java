@@ -14,21 +14,21 @@ import lombok.Setter;
 @NoArgsConstructor
 public class PessoaModel {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idPessoa;
 
-    @ManyToOne
-    @JoinColumn(name = "dados_pessoais_model_id_dados_pessoais")
-    private DadosPessoaisModel dadosPessoaisModel;
-
-    @ManyToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "contato_model_id_contato")
     private ContatoModel contatoModel;
 
-    @ManyToOne
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "dados_pessoais_model_id_dados_pessoais")
+    private DadosPessoaisModel dadosPessoaisModel;
+
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "endereco_model_id_endereco")
     private EnderecoModel enderecoModel;
 
+    // getters and setters...
 }

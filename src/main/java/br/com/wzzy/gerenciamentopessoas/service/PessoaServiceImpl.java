@@ -1,5 +1,6 @@
 package br.com.wzzy.gerenciamentopessoas.service;
 
+import br.com.wzzy.gerenciamentopessoas.exception.PessoaCadastradoException;
 import br.com.wzzy.gerenciamentopessoas.model.ContatoModel;
 import br.com.wzzy.gerenciamentopessoas.model.DadosPessoaisModel;
 import br.com.wzzy.gerenciamentopessoas.model.EnderecoModel;
@@ -9,10 +10,13 @@ import br.com.wzzy.gerenciamentopessoas.repository.DadosPessoaisRepository;
 import br.com.wzzy.gerenciamentopessoas.repository.EnderecoRepository;
 import br.com.wzzy.gerenciamentopessoas.repository.PessoaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PessoaServiceImpl implements PessoaService {
@@ -47,7 +51,7 @@ public class PessoaServiceImpl implements PessoaService {
         return pessoaRepository.findByDadosPessoaisModel_Nome(nome);
     }
 
-    private List<PessoaModel> recuperarCpfPessoa(String cpf) {
+    private Optional<PessoaModel> recuperarCpfPessoa(String cpf) {
         return pessoaRepository.findByDadosPessoaisModel_Cpf(cpf);
     }
 
@@ -57,7 +61,21 @@ public class PessoaServiceImpl implements PessoaService {
 
     @Override
     public PessoaModel cadastrarPessoa(PessoaModel pessoaModel) {
-        return getPessoaModel(pessoaModel);
+        return tratativarParaCadastrarPessoa(pessoaModel).getBody();
+    }
+
+    @Override
+    public ResponseEntity<PessoaModel> tratativarParaCadastrarPessoa(PessoaModel pessoaModel) {
+        Optional<PessoaModel> cpfCadastrado = pessoaRepository.findByDadosPessoaisModel_Cpf(
+                pessoaModel.getDadosPessoaisModel().getCpf()
+        );
+
+        if (cpfCadastrado.isPresent()) {
+            throw new PessoaCadastradoException("Pessoa já cadastrado!");
+        }
+
+        PessoaModel pessoaSalva = pessoaRepository.save(pessoaModel);
+        return ResponseEntity.status(HttpStatus.CREATED).body(pessoaModel);
     }
 
     @Override
@@ -69,6 +87,19 @@ public class PessoaServiceImpl implements PessoaService {
         }
 
         return getPessoaModel(pessoaModel);
+    }
+
+    @Override
+    public ResponseEntity<PessoaModel> tratativarParaAtualizarPessoa(Long idPessoa, PessoaModel pessoaModel) {
+        Optional<PessoaModel> idEncontraro = Optional.ofNullable(pessoaRepository.findByIdPessoa(
+                pessoaModel.getIdPessoa()
+        ));
+
+        if (idEncontraro.isPresent()) {
+            PessoaModel pessoaSalva = pessoaRepository.save(pessoaModel);
+        }
+
+        throw new PessoaCadastradoException("Pessoa com o id " + pessoaModel.getIdPessoa() + " não encontrado");
     }
 
     @Override
@@ -104,7 +135,7 @@ public class PessoaServiceImpl implements PessoaService {
     }
 
     @Override
-    public List<PessoaModel> buscarPessoaPorCpf(String cpf) {
+    public Optional<PessoaModel> buscarPessoaPorCpf(String cpf) {
         return recuperarCpfPessoa(cpf);
     }
 

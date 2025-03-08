@@ -1,5 +1,6 @@
 package br.com.wzzy.gerenciamentopessoas.controller;
 
+import br.com.wzzy.gerenciamentopessoas.exception.PessoaCadastradoException;
 import br.com.wzzy.gerenciamentopessoas.model.PessoaModel;
 import br.com.wzzy.gerenciamentopessoas.service.PessoaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("v1/pessoas")
@@ -22,24 +24,18 @@ public class PessoaController {
 
     @PostMapping("/cadastrar")
     public ResponseEntity<PessoaModel> cadastrarPessoa(@RequestBody PessoaModel pessoaModel) {
-        try {
+
             PessoaModel novaPessoa = pessoaService.cadastrarPessoa(pessoaModel);
             return new ResponseEntity<>(novaPessoa, HttpStatus.CREATED);
-        } catch (Exception exception) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    }
+
 
     @PatchMapping("/atualizar-pessoa/{idPessoa}")
-    public ResponseEntity<PessoaModel> atualizarPessoa(@PathVariable Long idPessoa,
+    public PessoaModel atualizarPessoa(@PathVariable Long idPessoa,
                                                        @RequestBody PessoaModel pessoaModel) {
-        try {
-            PessoaModel pessoaAtualizada = pessoaService.atualizarPessoa(idPessoa, pessoaModel);
-            return new ResponseEntity<>(pessoaAtualizada, HttpStatus.OK);
-        } catch (Exception exception) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+
+            return pessoaService.atualizarPessoa(idPessoa, pessoaModel);
         }
-    }
 
 
     @GetMapping("/listar-pessoa")
@@ -85,9 +81,9 @@ public class PessoaController {
     }
 
     @GetMapping("/buscar-cpf/{cpf}")
-    public ResponseEntity<List<PessoaModel>> buscarPessoaPorCpf(@PathVariable String cpf) {
+    public ResponseEntity<Optional<PessoaModel>> buscarPessoaPorCpf(@PathVariable String cpf) {
         try {
-            List<PessoaModel> pessoaEncontradaPorCpf = pessoaService.buscarPessoaPorCpf(cpf);
+            Optional<PessoaModel> pessoaEncontradaPorCpf = pessoaService.buscarPessoaPorCpf(cpf);
             return new ResponseEntity<>(pessoaEncontradaPorCpf, HttpStatus.OK);
         } catch (Exception exception) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
